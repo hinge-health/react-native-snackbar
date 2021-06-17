@@ -11,7 +11,8 @@
     "flow": "flow src",
     "clean": "rm -rf lib",
     "build": "yarn run clean && babel src --out-dir lib --ignore src/__tests__",
-    "prepublish": "yarn run build"
+    "prepublish": "yarn run build",
+    "postinstall": "yarn run build && rm -rf example"
   },
   "jest": {
     "preset": "react-native",

@@ -20,10 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 public class SnackbarModule extends ReactContextBaseJavaModule {
 
     private static final String REACT_NAME = "RNSnackbar";
+    private static final int PADDING = 24;
 
     private List<Snackbar> mActiveSnackbars = new ArrayList<>();
 
@@ -67,6 +69,9 @@ public class SnackbarModule extends ReactContextBaseJavaModule {
         if (!view.hasWindowFocus()) {
             // Get all modal views on the screen.
             ArrayList<View> modals = recursiveLoopChildren(view, new ArrayList<View>());
+
+            // Reverse array in order to get first the last modal rendered.
+            Collections.reverse(modals);
 
             for (View modal : modals) {
                 if (modal == null) continue;
@@ -125,16 +130,19 @@ public class SnackbarModule extends ReactContextBaseJavaModule {
             return;
         }
         View snackbarView = snackbar.getView();
-
-        TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setMaxLines(numberOfLines);
-
+        snackbarView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+        snackbarView.setPadding(PADDING, PADDING, PADDING, PADDING);
+        snackbarView.setBackground(getCurrentActivity()
+                .getResources()
+                .getDrawable(R.drawable.snackbar_background));
+        
         if (rtl && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             snackbarView.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             snackbarView.setTextDirection(View.TEXT_DIRECTION_RTL);
         }
 
         TextView snackbarText = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        snackbarText.setMaxLines(numberOfLines);
         snackbarText.setTextColor(textColor);
 
         if (font != null) {

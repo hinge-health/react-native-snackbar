@@ -12,7 +12,7 @@
     "clean": "rm -rf lib",
     "build": "yarn run clean && babel src --out-dir lib --ignore src/__tests__",
     "prepublish": "yarn run build",
-    "postinstall": "yarn run build && rm -rf example"
+    "postinstall": "yarn && yarn run build && rm -rf example"
   },
   "jest": {
     "preset": "react-native",
